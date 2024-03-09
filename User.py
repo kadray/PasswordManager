@@ -1,6 +1,13 @@
-#User
-import CryptModule as em
-class User:
-    def __init__(self, username, password):
-        self.username=em.encrypt(username, 5)
-        self.password=em.encrypt(password, 10)
+import Manager as mg
+import CryptModule as cm
+import DataStore as ds
+
+def register_user():
+    usr=input("Login: ")
+    pwd=input("Hasło: ")
+    while not mg.validate_password(pwd):
+            pwd=input("Hasło: ")
+    ds.create_database(usr)
+    ds.write_to_database(usr, [usr, pwd])
+
+register_user()
