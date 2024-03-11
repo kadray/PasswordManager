@@ -1,35 +1,34 @@
 #User
 import os
 import csv
-import re # to jest regex chyba
+import re 
 import CryptModule as cm
+import DataStore as ds
+
+def initialize_database():
+    db_name=input("Nazwa Bazy Danych: ")
+    pwd=input("Hasło: ")
+    while not validate_password(pwd):
+        pwd=input("Hasło: ")
+    ds.create_database(db_name)
+    ds.write_to_database(db_name, [db_name, pwd])
 
 
-
-'''
-#to do zmiany
-def change_password(old_pwd, new_pwd):
-    if old_pwd!=cm.decrypt(password):
-        return False
-    self.password=cm.encrypt(new_pwd)
-    return True
-'''
-
-def validate_password(password):
+def validate_password(pwd):
     # Check if password has at least 8 characters
-    if len(password) < 8:
+    if len(pwd) < 8:
         return False
     
     # Check if password has at least one special character
-    if not any(char in '.,!@#$%^&*/()[]{}-_=+' for char in password):
+    if not any(char in '.,!@#$%^&*/()[]{}-_=+' for char in pwd):
         return False
     
     # Check if password has at least one digit
-    if not re.search(r'\d', password):
+    if not re.search(r'\d', pwd):
         return False
     
     # Check if password has at least one capital letter
-    if not re.search(r'[A-Z]', password):
+    if not re.search(r'[A-Z]', pwd):
         return False
     
     return True
