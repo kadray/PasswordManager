@@ -10,9 +10,8 @@ def initialize_database():
     pwd=input("Hasło: ")
     while not validate_password(pwd):
         pwd=input("Hasło: ")
-    ds.create_database(db_name)
-    ds.write_to_database(db_name, [db_name, pwd])
-
+    test =ds.Database(db_name, pwd)
+    test.create_database()
 
 def validate_password(pwd):
     # Check if password has at least 8 characters
@@ -32,3 +31,5 @@ def validate_password(pwd):
         return False
     
     return True
+
+initialize_database()

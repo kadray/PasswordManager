@@ -31,7 +31,7 @@ class Database:
         return data
 
 
-test=Database("pls", "PAsswords_23^")  
+#test=Database("pls", "PAsswords_23^")  
 #test.create_database()
-test.write_to_database(["haselko", "tftft","git.pl"])
-print(test.read_from_database())
+#test.write_to_database(["haselko", "tftft","git.pl"])
+#print(test.read_from_database()[0][1])
