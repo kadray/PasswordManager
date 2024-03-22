@@ -8,7 +8,7 @@ from ttkbootstrap.toast import ToastNotification
 class dummy_data():
     def __init__(self):
         self.columns = ["ID","Site","Login","Password"]
-        self.data = [('1', 'http://www.google.com', 'login1', 'password1'), ('2', 'site2', 'login2', 'password2'), ('3', 'site3', 'login3', 'password3'), ('4', 'site4', 'login4', 'password4'), ('5', 'site5', 'login5', 'password5'), ('6', 'site6', 'login6', 'password6'), ('7', 'site7', 'login7', 'password7'), ('8', 'site8', 'login8', 'password8'), ('9', 'site9', 'login9', 'password9'), ('10', 'site10', 'login10', 'password10'), ('11', 'site11', 'login11', 'password11'), ('12', 'site12', 'login12', 'password12'), ('13', 'site13', 'login13', 'password13'), ('14', 'site14', 'login14', 'password14'), ('15', 'site15', 'login15', 'password15'), ('16', 'site16', 'login16', 'password16'), ('17', 'site17', 'login17', 'password17'), ('18', 'site18', 'login18', 'password18'), ('19', 'site19', 'login19', 'password19'),('20', 'site2', 'login2', 'password2'),('21', 'site2', 'login2', 'password2'),]
+        #self.data = [('1', 'http://www.google.com', 'login1', 'password1'), ('2', 'site2', 'login2', 'password2'), ('3', 'site3', 'login3', 'password3'), ('4', 'site4', 'login4', 'password4'), ('5', 'site5', 'login5', 'password5'), ('6', 'site6', 'login6', 'password6'), ('7', 'site7', 'login7', 'password7'), ('8', 'site8', 'login8', 'password8'), ('9', 'site9', 'login9', 'password9'), ('10', 'site10', 'login10', 'password10'), ('11', 'site11', 'login11', 'password11'), ('12', 'site12', 'login12', 'password12'), ('13', 'site13', 'login13', 'password13'), ('14', 'site14', 'login14', 'password14'), ('15', 'site15', 'login15', 'password15'), ('16', 'site16', 'login16', 'password16'), ('17', 'site17', 'login17', 'password17'), ('18', 'site18', 'login18', 'password18'), ('19', 'site19', 'login19', 'password19'),('20', 'site2', 'login2', 'password2'),('21', 'site2', 'login2', 'password2'),]
         self.database=ds.Database("baza", "Haselko")
         self.database.create_database()
         self.data=self.database.get_data_with_indices()
@@ -220,6 +220,9 @@ class PasswordManager(ttk.Frame):
         return
 
     def on_submit_changes_button(self,arg):
+        self.db_data.database.modify_entry(int(self.show_id.get()), [self.show_site.get(), self.show_login.get(), self.show_password.get()])
+        self.destroy()
+        self.__init__(master_window=app)
         return
 
     def on_add_button(self,arg):

@@ -32,7 +32,7 @@ class Database:
     def read_from_database(self):
         file=self.name+".json"
         data=cm.load_and_decrypt_from_json(file, self.pwd)
-        data=data[2:]
+        data=data[1:]
         return data
     
     def delete_from_database(self, index):
@@ -56,7 +56,7 @@ class Database:
         file = self.name + ".json"
         # Wczytanie i deszyfrowanie danych z pliku JSON
         decrypted_data = cm.load_and_decrypt_from_json(file, self.pwd)
-        decrypted_data=decrypted_data[2:]
+        decrypted_data=decrypted_data[1:]
         # Tworzenie listy zawierającej krotki (indeks wiersza, dane)
         data_with_indices = []
         for index, row in enumerate(decrypted_data):
