@@ -226,9 +226,10 @@ class PasswordManager(ttk.Frame):
         return
 
     def on_add_button(self,arg):
-        self.db_data.database.write_to_database((self.add_site.get(), self.add_login.get(), self.add_password.get()))
-        self.destroy()
-        self.__init__(master_window=app)
+        if self.add_site.get()!="Site URL..." and self.add_login.get()!="Login..." and self.add_password.get()!="Password...":
+            self.db_data.database.write_to_database((self.add_site.get(), self.add_login.get(), self.add_password.get()))
+            self.destroy()
+            self.__init__(master_window=app)
         return
 
     def on_delete_button(self,arg):
