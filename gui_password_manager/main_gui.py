@@ -4,10 +4,12 @@ import ttkbootstrap as ttk
 import DataStore as ds
 from ttkbootstrap.constants import *
 from ttkbootstrap.toast import ToastNotification
+from PasswordManager.gui_password_manager.child_window import New_window
+
 
 class dummy_data():
     def __init__(self):
-        self.columns = ["ID","Site","Login","Password"]
+        self.columns = ["ID","Site","Login"] #deleted password from it
         #self.data = [('1', 'http://www.google.com', 'login1', 'password1'), ('2', 'site2', 'login2', 'password2'), ('3', 'site3', 'login3', 'password3'), ('4', 'site4', 'login4', 'password4'), ('5', 'site5', 'login5', 'password5'), ('6', 'site6', 'login6', 'password6'), ('7', 'site7', 'login7', 'password7'), ('8', 'site8', 'login8', 'password8'), ('9', 'site9', 'login9', 'password9'), ('10', 'site10', 'login10', 'password10'), ('11', 'site11', 'login11', 'password11'), ('12', 'site12', 'login12', 'password12'), ('13', 'site13', 'login13', 'password13'), ('14', 'site14', 'login14', 'password14'), ('15', 'site15', 'login15', 'password15'), ('16', 'site16', 'login16', 'password16'), ('17', 'site17', 'login17', 'password17'), ('18', 'site18', 'login18', 'password18'), ('19', 'site19', 'login19', 'password19'),('20', 'site2', 'login2', 'password2'),('21', 'site2', 'login2', 'password2'),]
         self.database=ds.Database("baza", "Haselko")
         self.database.create_database()
@@ -16,7 +18,11 @@ class dummy_data():
 class PasswordManager(ttk.Frame):
     def __init__(self, master_window):
         super().__init__(master_window, padding=(20, 10))
-        self.grid(row=0, column=0)
+        self.pack()
+
+        #variables to close window on click from small window
+        self.master_window = master_window
+        self.is_closed_window = True
 
         #variables to show and edit data on the left
         self.show_id = ttk.DoubleVar(value=0)
@@ -32,10 +38,19 @@ class PasswordManager(ttk.Frame):
         self.add_password = ttk.StringVar(value="")
         self.add_login = ttk.StringVar(value="")
 
+        #main password window
+        self.main_pass_window = New_window(self)
+        self.wait_window(self.main_pass_window)
+
         #variables for treeview
         self.db_data=dummy_data()
         self.columns = self.db_data.columns
         self.data = self.db_data.data
+        self.start_len = len(self.data)
+
+        #dont even ask about it (this if closes window without errors)
+        if self.is_closed_window:
+            return
 
         #treeview container
         self.left_container = ttk.Frame(self)
@@ -77,33 +92,36 @@ class PasswordManager(ttk.Frame):
     #tworzenie treeview z haslami
     def create_treeview(self):
         a = 20
-        if(len(self.data)>20):
-            a=20
-        else:
-            a= len(self.data)
         tree = ttk.Treeview(master=self.left_container, bootstyle = "secondary", columns=self.columns, show='headings', height=a)
         tree.grid_configure(row=0,column=0,columnspan=4,rowspan=5,padx=20, pady=20)
 
         tree.column("ID", width=50, anchor=CENTER)
         tree.column("Login", anchor=CENTER)
-        tree.column("Password", anchor=CENTER)
+        # tree.column("Password", anchor=CENTER)
         tree.column("Site", anchor=CENTER)
 
         tree.heading("ID", text="ID")
         tree.heading("Site", text="Site")
         tree.heading("Login", text="Login")
-        tree.heading("Password", text="Password")
+        # tree.heading("Password", text="Password")
 
         tree.tag_configure('change_bg',background="#20374C")
-
+        index = 0
         for i in self.data:
             if(int(i[0])%2==1):
-                tree.insert("", "end", values=i, tags="change_bg")
+                tree.insert("", 'end', values=i, tags="change_bg", iid=index)
             else:
-                tree.insert("", "end", values=i)
+                tree.insert("", 'end', values=i, iid=index)
             tree.bind("<<TreeviewSelect>>",self.tree_on_click_element)
+            tree.bind("<Button-3>",self.identify_item)
+
+            index+=1
 
         return tree
+
+    def identify_item(self,event):
+        item = self.tree.identify_row(event.y)
+        print(item)
 
     #funkcja klikania elementu w treeview (przypisywanie wartosci do zmiennych)
     def tree_on_click_element(self, event):
@@ -116,7 +134,7 @@ class PasswordManager(ttk.Frame):
         self.show_id.set(value=values[0])
         self.is_shown.set(value=True)
         self.on_show_button("arg")
-        print(values)
+        # print(values)
         return
 
     #template do pola fomularza dodawania hasla
@@ -220,26 +238,39 @@ class PasswordManager(ttk.Frame):
         return
 
     def on_submit_changes_button(self,arg):
-        self.db_data.database.modify_entry(int(self.show_id.get()), [self.show_site.get(), self.show_login.get(), self.show_password.get()])
-        self.destroy()
-        self.__init__(master_window=app)
+        submittet_password =""
+        clicked_password_stared = ""
+        clicked_password_placeholder= self.clicked_password.get()
+        for x in clicked_password_placeholder:
+            clicked_password_stared +="*"
+
+        if(self.show_password.get()==clicked_password_stared):
+            submittet_password = self.clicked_password.get()
+        else:
+            submittet_password = self.show_password.get()
+        self.db_data.database.modify_entry(int(self.show_id.get()), [self.show_site.get(), self.show_login.get(), submittet_password])
+
+        self.tree.item(int(self.show_id.get())-1,values=(int(self.show_id.get()),self.show_site.get(),self.show_login.get(),submittet_password))
         return
 
     def on_add_button(self,arg):
-        if self.add_site.get()!="Site URL..." and self.add_login.get()!="Login..." and self.add_password.get()!="Password...":
-            self.db_data.database.write_to_database((self.add_site.get(), self.add_login.get(), self.add_password.get()))
-            self.destroy()
-            self.__init__(master_window=app)
+        self.db_data.database.write_to_database((self.add_site.get(), self.add_login.get(), self.add_password.get()))
+        if ((self.start_len + 1) % 2 == 1):
+            self.tree.insert("", 'end', values=(self.start_len + 1, self.add_site.get(), self.add_login.get(), self.add_password.get()), tags="change_bg", iid=self.start_len)
+        else:
+            self.tree.insert("", 'end', values=(self.start_len + 1, self.add_site.get(), self.add_login.get(), self.add_password.get()), iid=self.start_len)
+        self.start_len+=1
+        self.tree.bind("<<TreeviewSelect>>", self.tree_on_click_element)
         return
 
     def on_delete_button(self,arg):
         self.db_data.database.delete_from_database(int(self.show_id.get()))
-        self.destroy()
-        self.__init__(master_window=app)
+        clickedItem = self.tree.focus()
+        self.tree.delete(clickedItem)
         return
 
 if __name__ == "__main__":
     app = ttk.Window("PasswordManager","superhero",resizable=(False,False))
-    app.geometry("1150x450")
+    app.geometry("1000x450")
     PasswordManager(app)
     app.mainloop()
