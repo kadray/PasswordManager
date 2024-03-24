@@ -4,8 +4,8 @@ import os
 import re
 
 class Database:
-    def __init__(self, db_name, pwd):
-        self.name=db_name
+    def __init__(self, pwd):
+        self.name="database"
         self.pwd=pwd
 
 
@@ -34,6 +34,12 @@ class Database:
         data=cm.load_and_decrypt_from_json(file, self.pwd)
         data=data[1:]
         return data
+    
+    def get_password(self):
+        file=self.name+".json"
+        data=cm.load_and_decrypt_from_json(file, self.pwd)
+        passwd=data[0][1]
+        return passwd        
     
     def delete_from_database(self, index):
         file = self.name + ".json"
