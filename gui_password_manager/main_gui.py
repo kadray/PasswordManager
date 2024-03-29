@@ -266,7 +266,22 @@ class PasswordManager(ttk.Frame):
     def on_delete_button(self,arg):
         self.db_data.database.delete_from_database(int(self.show_id.get()))
         clickedItem = self.tree.focus()
-        self.tree.delete(clickedItem)
+        current_data = ds.Database("baza","Haselko").get_data_with_indices()
+        print(current_data)
+        for i in self.tree.get_children():
+            self.tree.delete(i)
+
+        index = 0
+        for i in current_data:
+            if (int(i[0]) % 2 == 1):
+                self.tree.insert("", 'end', values=i, tags="change_bg", iid=index)
+            else:
+                self.tree.insert("", 'end', values=i, iid=index)
+            self.tree.bind("<<TreeviewSelect>>", self.tree_on_click_element)
+            self.tree.bind("<Button-3>", self.identify_item)
+
+            index += 1
+        # self.tree.delete(clickedItem)
         return
 
 if __name__ == "__main__":
