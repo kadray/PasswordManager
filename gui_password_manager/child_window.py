@@ -44,6 +44,7 @@ class New_window(Toplevel):
         database=ds.Database(self.typed_password.get())
         db_password=database.get_password()
         if (self.typed_password.get() == db_password):
+            self.main_password=self.typed_password
             self.master.is_closed_window = False
             self.destroy()
         else:

@@ -8,10 +8,10 @@ from child_window import New_window
 
 
 class dummy_data():
-    def __init__(self):
+    def __init__(self, password):
         self.columns = ["ID","Site","Login"] #deleted password from it
         #self.data = [('1', 'http://www.google.com', 'login1', 'password1'), ('2', 'site2', 'login2', 'password2'), ('3', 'site3', 'login3', 'password3'), ('4', 'site4', 'login4', 'password4'), ('5', 'site5', 'login5', 'password5'), ('6', 'site6', 'login6', 'password6'), ('7', 'site7', 'login7', 'password7'), ('8', 'site8', 'login8', 'password8'), ('9', 'site9', 'login9', 'password9'), ('10', 'site10', 'login10', 'password10'), ('11', 'site11', 'login11', 'password11'), ('12', 'site12', 'login12', 'password12'), ('13', 'site13', 'login13', 'password13'), ('14', 'site14', 'login14', 'password14'), ('15', 'site15', 'login15', 'password15'), ('16', 'site16', 'login16', 'password16'), ('17', 'site17', 'login17', 'password17'), ('18', 'site18', 'login18', 'password18'), ('19', 'site19', 'login19', 'password19'),('20', 'site2', 'login2', 'password2'),('21', 'site2', 'login2', 'password2'),]
-        self.database=ds.Database("Haselko")
+        self.database=ds.Database(password)
         self.database.create_database()
         self.data=self.database.get_data_with_indices()
 
@@ -40,10 +40,11 @@ class PasswordManager(ttk.Frame):
 
         #main password window
         self.main_pass_window = New_window(self)
+        self.password_from_child= self.main_pass_window.main_password.get()
         self.wait_window(self.main_pass_window)
 
         #variables for treeview
-        self.db_data=dummy_data()
+        self.db_data=dummy_data(self.password_from_child)
         self.columns = self.db_data.columns
         self.data = self.db_data.data
         self.start_len = len(self.data)
