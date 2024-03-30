@@ -107,7 +107,9 @@ def validate_password(pwd):
     
     return True
 
-
+def database_exists():
+    file_name="database.json"
+    return os.path.exists(file_name) and os.path.isfile(file_name)
 
 '''
 test=Database("Haslo_123")
