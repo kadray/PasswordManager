@@ -4,8 +4,8 @@ import os
 import re
 
 class Database:
-    def __init__(self, db_name, pwd):
-        self.name=db_name
+    def __init__(self, pwd):
+        self.name="database"
         self.pwd=pwd
 
 
@@ -34,6 +34,12 @@ class Database:
         data=cm.load_and_decrypt_from_json(file, self.pwd)
         data=data[1:]
         return data
+    
+    def get_password(self):
+        file=self.name+".json"
+        data=cm.load_and_decrypt_from_json(file, self.pwd)
+        passwd=data[0][1]
+        return passwd        
     
     def delete_from_database(self, index):
         file = self.name + ".json"
@@ -102,16 +108,11 @@ def validate_password(pwd):
     return True
 
 
-def initialize_database():
-    db_name=input("Nazwa Bazy Danych: ")
-    pwd=input("Hasło: ")
-    while not validate_password(pwd):
-        pwd=input("Hasło: ")
-    test =Database(db_name, pwd)
-    test.create_database()
+
 '''
-test=Database("bazaaa", "haslo")
-#test.create_database()
+test=Database("Haslo_123")
+test.create_database()
 test.write_to_database(["strona2", "LOGIN", "haslo"])
-print(test.get_data_with_indices())
+print(test.read_from_database())
+print(test.get_password())
 '''
