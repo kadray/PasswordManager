@@ -8,6 +8,7 @@ class New_window(Toplevel):
         super().__init__(master)
         self.title = "Main Password"
         self.geometry("400x200")
+        self.attributes('-topmost', True)
         self.protocol("WM_DELETE_WINDOW",  self.disable_button)
 
         self.master=master
