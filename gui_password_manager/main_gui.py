@@ -262,6 +262,9 @@ class PasswordManager(ttk.Frame):
             else:
                 self.tree.insert("", 'end', values=(self.start_len + 1, self.add_site.get(), self.add_login.get(), self.add_password.get()), iid=self.start_len)
             self.start_len+=1
+            self.add_site.set(value="Site URL...")
+            self.add_login.set(value="Login...")
+            self.add_password.set(value="Password...")
             self.tree.bind("<<TreeviewSelect>>", self.tree_on_click_element)
             return
 
@@ -283,7 +286,7 @@ class PasswordManager(ttk.Frame):
             self.tree.bind("<Button-3>", self.identify_item)
 
             index += 1
-        self.start_len=index+1
+        self.start_len=index
         self.show_password.set(value='')
         self.clicked_password.set(value='')
         self.show_id.set(value=0)
