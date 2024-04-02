@@ -240,12 +240,7 @@ class PasswordManager(ttk.Frame):
 
     def on_submit_changes_button(self,arg):
         submittet_password =""
-        clicked_password_stared = ""
-        clicked_password_placeholder= self.clicked_password.get()
-        for x in clicked_password_placeholder:
-            clicked_password_stared +="*"
-
-        if(self.show_password.get()==clicked_password_stared):
+        if(not self.is_shown.get()):
             submittet_password = self.clicked_password.get()
         else:
             submittet_password = self.show_password.get()
