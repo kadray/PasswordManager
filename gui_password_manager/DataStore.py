@@ -2,11 +2,13 @@ import csv
 import base64
 from cryptography.fernet import Fernet
 import os
-
+import key_manager as km
 class Database:
     def __init__(self,password):
         self.master_password=password
-        self.key = b'j4jyQPzZ-APGxK1j3_mmQjgbqQtWefR598wr4zwHvJM='
+        if not check_file_existence('db_key.key'):
+            km.generate_and_save_key(self.master_password)
+        self.key = km.get_key(self.master_password)
         self.cipher_suite = Fernet(self.key)
         self.filename = "database.csv"
     def _encrypt_data(self, data):
@@ -88,8 +90,7 @@ class Database:
         else:
             print("Index out of range")
 
-def check_database_existence():
-    filename="database.csv"
+def check_file_existence(filename):
     return os.path.isfile(filename)
 
 # Przykład użycia

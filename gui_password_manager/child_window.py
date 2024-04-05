@@ -25,7 +25,7 @@ class New_window(Toplevel):
         return
 
     def create_label(self):
-        if(not ds.check_database_existence()):
+        if(not ds.check_file_existence("database.csv")):
             text = "Set main password"
         else:
             text = "Insert main password"
@@ -35,7 +35,7 @@ class New_window(Toplevel):
 
     def create_submit_button(self):
         button = ttk.Button(master=self, text="Submit",style="secondary.Tbutton")
-        if(not ds.check_database_existence()):
+        if(not ds.check_file_existence("database.csv")):
             button.bind("<Button-1>", self.new_password)
         else:
             button.bind("<Button-1>",self.check_password)
