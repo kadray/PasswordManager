@@ -1,7 +1,7 @@
 import webbrowser
 from tkinter import *
 import ttkbootstrap as ttk
-import DataStore as ds
+import datastore as ds
 from ttkbootstrap.constants import *
 from ttkbootstrap.toast import ToastNotification
 from child_window import New_window
@@ -12,8 +12,8 @@ class dummy_data():
         self.columns = ["ID","Site","Login"] #deleted password from it
         #self.data = [('1', 'http://www.google.com', 'login1', 'password1'), ('2', 'site2', 'login2', 'password2'), ('3', 'site3', 'login3', 'password3'), ('4', 'site4', 'login4', 'password4'), ('5', 'site5', 'login5', 'password5'), ('6', 'site6', 'login6', 'password6'), ('7', 'site7', 'login7', 'password7'), ('8', 'site8', 'login8', 'password8'), ('9', 'site9', 'login9', 'password9'), ('10', 'site10', 'login10', 'password10'), ('11', 'site11', 'login11', 'password11'), ('12', 'site12', 'login12', 'password12'), ('13', 'site13', 'login13', 'password13'), ('14', 'site14', 'login14', 'password14'), ('15', 'site15', 'login15', 'password15'), ('16', 'site16', 'login16', 'password16'), ('17', 'site17', 'login17', 'password17'), ('18', 'site18', 'login18', 'password18'), ('19', 'site19', 'login19', 'password19'),('20', 'site2', 'login2', 'password2'),('21', 'site2', 'login2', 'password2'),]
         self.database=ds.Database(password)
-        self.database.create_database()
-        self.data=self.database.get_data_with_indices()
+        #self.database.initialize_database()
+        self.data=self.database.get_data()
 
 class PasswordManager(ttk.Frame):
     def __init__(self, master_window):
@@ -244,14 +244,14 @@ class PasswordManager(ttk.Frame):
             submittet_password = self.clicked_password.get()
         else:
             submittet_password = self.show_password.get()
-        self.db_data.database.modify_entry(int(self.show_id.get()), [self.show_site.get(), self.show_login.get(), submittet_password])
+        self.db_data.database.modify_entry(int(self.show_id.get()), self.show_site.get(), self.show_login.get(), submittet_password)
 
         self.tree.item(int(self.show_id.get())-1,values=(int(self.show_id.get()),self.show_site.get(),self.show_login.get(),submittet_password))
         return
 
     def on_add_button(self,arg):
         if self.add_site.get()!="Site URL..." and  self.add_login.get()!="Login..." and self.add_password.get()!="Password...":
-            self.db_data.database.write_to_database((self.add_site.get(), self.add_login.get(), self.add_password.get()))
+            self.db_data.database.add_entry(self.add_site.get(), self.add_login.get(), self.add_password.get())
             if ((self.start_len + 1) % 2 == 1):
                 self.tree.insert("", 'end', values=(self.start_len + 1, self.add_site.get(), self.add_login.get(), self.add_password.get()), tags="change_bg", iid=self.start_len)
             else:
@@ -264,9 +264,9 @@ class PasswordManager(ttk.Frame):
             return
 
     def on_delete_button(self,arg):
-        self.db_data.database.delete_from_database(int(self.show_id.get()))
+        self.db_data.database.delete_entry(int(self.show_id.get()))
         clickedItem = self.tree.focus()
-        current_data = ds.Database(self.password_from_child).get_data_with_indices()
+        current_data = ds.Database(self.password_from_child).get_data()
         print(current_data)
         for i in self.tree.get_children():
             self.tree.delete(i)
