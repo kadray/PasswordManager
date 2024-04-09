@@ -1,7 +1,7 @@
 import webbrowser
 from tkinter import *
 import ttkbootstrap as ttk
-import datastore as ds
+import DataStore as ds
 from ttkbootstrap.constants import *
 from ttkbootstrap.toast import ToastNotification
 from child_window import New_window
@@ -40,18 +40,17 @@ class PasswordManager(ttk.Frame):
 
         #main password window
         self.main_pass_window = New_window(self)
-        self.password_from_child= self.main_pass_window.main_password.get()
         self.wait_window(self.main_pass_window)
+        if self.is_closed_window:
+            return        
+        self.password_from_child= str(self.main_pass_window.typed_password.get())
+
 
         #variables for treeview
         self.db_data=dummy_data(self.password_from_child)
         self.columns = self.db_data.columns
         self.data = self.db_data.data
         self.start_len = len(self.data)
-
-        #dont even ask about it (this if closes window without errors)
-        if self.is_closed_window:
-            return
 
         #treeview container
         self.left_container = ttk.Frame(self)

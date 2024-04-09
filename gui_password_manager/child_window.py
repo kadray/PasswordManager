@@ -1,7 +1,7 @@
 from tkinter import *
 import ttkbootstrap as ttk
 from ttkbootstrap.toast import ToastNotification
-import datastore as ds
+import DataStore as ds
 
 class New_window(Toplevel):
     def __init__(self, master):
@@ -12,7 +12,6 @@ class New_window(Toplevel):
         self.protocol("WM_DELETE_WINDOW",  self.disable_button)
 
         self.master=master
-        self.main_password = ttk.StringVar(value="haslo") #musi pobierac z bazy glowne haslo
         self.typed_password = ttk.StringVar(value="")
 
         self.create_label()
@@ -45,7 +44,6 @@ class New_window(Toplevel):
         database=ds.Database(self.typed_password.get())
         db_password=database.get_password()
         if (self.typed_password.get() == db_password):
-            self.main_password=self.typed_password
             self.master.is_closed_window = False
             self.destroy()
         else:
@@ -58,8 +56,8 @@ class New_window(Toplevel):
         return
 
     def new_password(self,arg):
-        self.main_password.set(value=self.typed_password.get()) #wpisanie do bazy danych musi być
-        db=ds.Database(self.main_password.get())
+        db=ds.Database(self.typed_password.get())
+        print(self.typed_password.get())
         db.initialize_database()
         self.master.is_closed_window = False
         self.destroy()
