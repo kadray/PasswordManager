@@ -37,27 +37,29 @@ class New_window(Toplevel):
         if(not ds.check_file_existence("database.csv")):
             button.bind("<Button-1>", self.new_password)
         else:
-            button.bind("<Button-1>",self.check_password)
+            button.bind("<Button-1>", self.check_password)
         button.pack(padx=10, pady=10)
 
-    def check_password(self,arg):
-        database=ds.Database(self.typed_password.get())
-        db_password=database.get_password()
-        if (self.typed_password.get() == db_password):
-            self.master.is_closed_window = False
-            self.destroy()
-        else:
+    def check_password(self, arg):
+        try:
+            database=ds.Database(self.typed_password.get())
+            db_password=database.get_password()
+            if (self.typed_password.get() == db_password):
+                self.master.is_closed_window = False
+                self.destroy()
+        except Exception:
             toast = ToastNotification(
-                title="Wrong password!",
-                message="Your password is wrong!",
-                duration=2000
+            title="Wrong password!",
+            message="Your password is wrong!",
+            duration=2000
             )
             toast.show_toast()
-        return
+            return False
+        return True
+
 
     def new_password(self,arg):
         db=ds.Database(self.typed_password.get())
-        print(self.typed_password.get())
         db.initialize_database()
         self.master.is_closed_window = False
         self.destroy()
