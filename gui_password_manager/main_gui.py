@@ -245,16 +245,16 @@ class PasswordManager(ttk.Frame):
             submittet_password = self.show_password.get()
         self.db_data.database.modify_entry(int(self.show_id.get()), self.show_site.get(), self.show_login.get(), submittet_password)
 
-        self.tree.item(int(self.show_id.get())-1,values=(int(self.show_id.get()),self.show_site.get(),self.show_login.get(),submittet_password))
+        self.tree.item(int(self.show_id.get()),values=(int(self.show_id.get()),self.show_site.get(),self.show_login.get(),submittet_password))
         return
 
     def on_add_button(self,arg):
         if self.add_site.get()!="Site URL..." and  self.add_login.get()!="Login..." and self.add_password.get()!="Password...":
             self.db_data.database.add_entry(self.add_site.get(), self.add_login.get(), self.add_password.get())
             if ((self.start_len + 1) % 2 == 1):
-                self.tree.insert("", 'end', values=(self.start_len + 1, self.add_site.get(), self.add_login.get(), self.add_password.get()), tags="change_bg", iid=self.start_len)
+                self.tree.insert("", 'end', values=(self.start_len, self.add_site.get(), self.add_login.get(), self.add_password.get()), tags="change_bg", iid=self.start_len)
             else:
-                self.tree.insert("", 'end', values=(self.start_len + 1, self.add_site.get(), self.add_login.get(), self.add_password.get()), iid=self.start_len)
+                self.tree.insert("", 'end', values=(self.start_len, self.add_site.get(), self.add_login.get(), self.add_password.get()), iid=self.start_len)
             self.start_len+=1
             self.add_site.set(value="Site URL...")
             self.add_login.set(value="Login...")
@@ -278,8 +278,8 @@ class PasswordManager(ttk.Frame):
                 self.tree.insert("", 'end', values=i, iid=index)
             self.tree.bind("<<TreeviewSelect>>", self.tree_on_click_element)
             self.tree.bind("<Button-3>", self.identify_item)
-
             index += 1
+
         self.start_len=index
         self.show_password.set(value='')
         self.clicked_password.set(value='')
@@ -290,6 +290,6 @@ class PasswordManager(ttk.Frame):
 
 if __name__ == "__main__":
     app = ttk.Window("PasswordManager","superhero",resizable=(False,False))
-    app.geometry("1000x450")
+    app.geometry("1200x450")
     PasswordManager(app)
     app.mainloop()
