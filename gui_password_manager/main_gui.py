@@ -6,7 +6,6 @@ from ttkbootstrap.constants import *
 from ttkbootstrap.toast import ToastNotification
 from child_window import New_window
 
-
 class dummy_data():
     def __init__(self, password):
         self.columns = ["ID","Site","Login"] #deleted password from it
@@ -243,7 +242,7 @@ class PasswordManager(ttk.Frame):
             submittet_password = self.clicked_password.get()
         else:
             submittet_password = self.show_password.get()
-        self.db_data.database.modify_entry(int(self.show_id.get()), self.show_site.get(), self.show_login.get(), submittet_password)
+        self.db_data.database.modify_entry(int(self.show_id.get()+1), self.show_site.get(), self.show_login.get(), submittet_password)
 
         self.tree.item(int(self.show_id.get()),values=(int(self.show_id.get()),self.show_site.get(),self.show_login.get(),submittet_password))
         return
