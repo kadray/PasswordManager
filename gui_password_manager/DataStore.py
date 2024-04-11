@@ -41,7 +41,7 @@ class Database:
             reader = csv.reader(file)
             for row in reader:
                 rows.append(row)
-
+        index=index+1
         if 0 <= index < len(rows):
             del rows[index]
             with open(self.filename, mode='w', newline='') as file:
