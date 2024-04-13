@@ -6,9 +6,6 @@ def generate_key():
     return key
 
 def generate_key_from_seed(seed):
-    """
-    Generates a Fernet key from a seed string and returns a Fernet key.
-    """
     # Convert the seed string to bytes
     seed_bytes = bytes(seed, 'utf-8')
     # Use a hash function to create a 32-byte key from the seed
@@ -19,18 +16,12 @@ def generate_key_from_seed(seed):
 
 
 def _encrypt(message, key):
-    """
-    Encrypts a message with the provided key and saves it to a file.
-    """
     f = Fernet(key)
     encrypted_message = f.encrypt(message)
     with open("db_key.key", "wb") as file:
         file.write(encrypted_message)
 
 def _decrypt(key):
-    """
-    Decrypts a message from a file using the provided key.
-    """
     f = Fernet(key)
     with open("db_key.key", "rb") as file:
         encrypted_message = file.read()
@@ -38,9 +29,6 @@ def _decrypt(key):
     return decrypted_message
 
 def string_to_bytes(string):
-    """
-    Converts a string to bytes format (b'...').
-    """
     return bytes(string, 'utf-8')
 
 def generate_and_save_key(password):
@@ -51,14 +39,5 @@ def generate_and_save_key(password):
 def get_key(password):
     key=generate_key_from_seed(password)
     return _decrypt(key)
-
-
-'''
-message=b'YF0UgTCLXPKdMm_WoCTVOOliUHza_oGPNGXUHHQktBs='
-key=generate_key_from_seed("miau")
-print(message)
-_encrypt(message, key)
-print(_decrypt(key))
-'''
 
 

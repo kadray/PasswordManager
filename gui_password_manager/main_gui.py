@@ -289,6 +289,6 @@ class PasswordManager(ttk.Frame):
 
 if __name__ == "__main__":
     app = ttk.Window("PasswordManager","superhero",resizable=(False,False))
-    app.geometry("1200x450")
+    app.geometry("1000x450")
     PasswordManager(app)
     app.mainloop()

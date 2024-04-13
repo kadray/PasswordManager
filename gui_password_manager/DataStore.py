@@ -92,19 +92,3 @@ class Database:
 
 def check_file_existence(filename):
     return os.path.isfile(filename)
-
-# Przykład użycia
-'''
-key = b'j4jyQPzZ-APGxK1j3_mmQjgbqQtWefR598wr4zwHvJM='  # Możesz wygenerować własny klucz
-db = Database(key)
-db.initialize_database("haslo123")
-# Dodawanie wpisów do bazy danych
-db.add_entry("www.example.com", "user123", "password123")
-#db.write_to_database("www.anotherexample.com", "admin", "securepassword")
-# Wyświetlenie zdeszyfrowanych danych
-decrypted_data = db.get_data()
-for entry in decrypted_data:
-    print(entry)
-
-print(db.get_password())
-'''
